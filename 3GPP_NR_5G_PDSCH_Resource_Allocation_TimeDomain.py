@@ -1,7 +1,14 @@
-# import math																# for floor function
+##################################################################
+# Script to calculate Start and Length indicator value (SLIV)
+# for New Radio 5G Physical layer Downlink Shared Channel (PDSCH)
+# in time domain.
+# based on 3GPP 38.214 secton 5.1
+##################################################################
+
+import math																# for floor function
 import string															# for replace function
 print "\nThis utility is for Resource Allocation in Time domain only\nPlease refer to 38.214 Section5.1.2.1\n"
-# Time_Domain_Resource_Index = int(raw_input("Time_Domain_Resource_Index in DCI(3bits)> ")) 
+# Time_Domain_Resource_Index = int(raw_input("Time_Domain_Resource_Index in DCI(3bits)> "))
 # PDSCH_Mapping_Type = raw_input("A or B > ").upper()
 
 # if PDSCH_Mapping_Type == "A":
@@ -22,4 +29,4 @@ if Length_Value <= 14-Start_Symbol:
 		print "\nSLIV in CRM command %r" %hex(SLIV)
 else:
 	print "The Value of L does not satisfy '0<L<=14-S'\nPlease refer to 38.214 Section 5.1.2.1"
-raw_input()
+#raw_input()
