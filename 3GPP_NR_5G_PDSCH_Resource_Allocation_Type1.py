@@ -1,3 +1,9 @@
+###################################################################
+# This util is to generate Resource Index Value for RA Type -0
+# Refer to 3GPP 38.214 section 5.1
+###################################################################
+
+
 import math
 from sys import exit
 print "This script is to calculate Resource Allocation Type 1 Bits"
@@ -21,7 +27,7 @@ else:
 print "RIV: %i" %RIV
 def dec_to_bin(x):
     return int(bin(x)[2:])
-print "Decimal of RIV : ", dec_to_bin(RIV)
-print "Hex value for CRM command :", hex(RIV)
+#print "Decimal of RIV : ", dec_to_bin(RIV)
+#print "Hex value for CRM command :", hex(RIV)
 
 raw_input()
