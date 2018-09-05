@@ -1,3 +1,9 @@
+#######################################################################
+# This Utility is to create bitmap for NR 5G RA  type 0
+# Refere to 3GPP 38.214 Section 5.1
+#######################################################################
+
+
 import math																# for floor function
 import string															# for replace function
 print "\nThis utility is for Resource Allocation Type-0 only\nPlease refer to 38.214 Section5.1.2.2.1"
@@ -22,4 +28,4 @@ print "The size of the last RBG in the BWP is %r" %size_of_last_RBG
 print "Total number of RBGs in the BWP is %r" %Total_RBG
 new_bitmap = string.replace(bitmap_string,"," , "")
 print "Bitmap to use = %r" %new_bitmap
-raw_input()
+# raw_input()
