@@ -1,3 +1,10 @@
+##############################################################
+# This util is to calculate O_ack value for HARQ Ack/Nack over
+# PUSCH.
+# This util can be useful in calculating resources used for
+# HARQ over PUSCH
+# Please refer to 38.211 for details
+##############################################################
 import math
 import numpy as np
 
@@ -47,7 +54,7 @@ else: # LDPCgraph2
         Kb = 8
     else:
         Kb = 6
-    
+
 print "Kb is %i" %Kb
 Z_values = [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,18,20,22,24,26,28,30,32,36,40,44,48,52,56,60,64,72,80,88,96,104,112,120,128,144,160,176,192,208,224,240,256,288,320,352,384]
 
@@ -78,5 +85,3 @@ print B
 Q_ack = min(A,B)
 print "\n number of REs per symbol : %i" %(12*N_rb)
 print "\n Q_ack value is : %i" %Q_ack
-    
-    
