@@ -1,8 +1,14 @@
+#########################################################
+# This util is to calculate PDSCH TB size for NR 5G
+# For Ninfo < 3824, please refer to table in 38.214 as mentioned in the script
+# Further enhancements for LDPCgraph selection pending
+#########################################################
+
 import math
 from sys import exit
 print "Please use the appropriate table in the script for 64QAM and 256QAM"
 
-MCS_Table = int(raw_input("""Please state the MCS table to use 
+MCS_Table = int(raw_input("""Please state the MCS table to use
 							0 - 64QAM
 							1 - 256QAM
 							> """))
@@ -49,7 +55,7 @@ else:
 	n = math.floor(math.log(N_info-24,2))-5
 	N_info_quant = max(3840, math.pow(2,n)*math.ceil((N_info-24)/math.pow(2,n)))
 	print "quantized intermediate number of information bits : %r\n" %N_info_quant
-	
+
 
 if Code_Rate <=0.25:
 	C = math.ceil((N_info_quant+24)/3816)
@@ -68,20 +74,21 @@ else:
 		print "As N_info_quant < 8424 and Code rate > 1/4,TB size is : %r\n" %TBS
 		print "Average throughput : %r bps" %Average_Througput
 
-if TBS <= 292:
-	print "LDPCgraph2"
-else:
-	print "TBS > 292"
-if TBS <= 3824:
-	if Modulation_order <= (67/100):
-		print "LDPCgraph2"
-	else:
-		print "Modulation_order is > 0.67"
-else:
-	print "TBS is > 3824"
+# Further enhancements for LDPCgraph selection pending
+#if TBS <= 292:
+	#print "LDPCgraph2"
+#else:
+	#print "TBS > 292"
+#if TBS <= 3824:
+	#if Modulation_order <= (67/100):
+		#print "LDPCgraph2"
+	#else:
+		#print "Modulation_order is > 0.67"
+#else:
+	#print "TBS is > 3824"
 
-if Modulation_order <= (25/100):
-	print "LDPCgraph2"
-else:
-	print "LDPCgraph1"
+#if Modulation_order <= (25/100):
+	#print "LDPCgraph2"
+#else:
+	#print "LDPCgraph1"
 raw_input()
