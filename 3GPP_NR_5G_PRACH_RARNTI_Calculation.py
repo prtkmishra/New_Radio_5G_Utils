@@ -23,10 +23,13 @@ prach_duration = prach_duration_list.pop(prach_cfg_idx)
 starting_symbol = starting_symbol_list.pop(prach_cfg_idx)
 x_idx = x.pop(prach_cfg_idx)
 y_idx = y.pop(prach_cfg_idx)
+prach_strt_symbol = starting_symbol_list.pop(prach_cfg_idx)
+
 print "\nFor Prach Config Index %i\nprach duration = %i symbols \nPRACH Starting symbol = %i" %(config_idx, prach_duration,starting_symbol)
 valid_prach_sfn = []
 for sfn in range(0,1024):
     if sfn%x_idx == y_idx:
         valid_prach_sfn.append(sfn)
 print "\nBelow is a list of valid prach SFN\n",valid_prach_sfn
+print "\nPrach starting symbol = ",prach_strt_symbol
         
