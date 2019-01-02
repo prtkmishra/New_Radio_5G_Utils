@@ -9,6 +9,7 @@
 ###########################################################
 import math
 import pandas as pd
+import os
 
 # s_id
 # t_id
@@ -30,10 +31,10 @@ class RaRntiCalculator:
     sf_number =    []
     slot_num_sf = []
     
-    def __init__(self, rat_type, config_idx, tdd_periodicity, input_file_name='./InputData/Input.xlsx'):
+    def __init__(self, rat_type, config_idx, tdd_periodicity, input_file_name='./ra_rnti_Calculation/InputData/Input.xlsx'):
         self.rat_type = rat_type
-        self.config_idx = config_idx
-        self.tdd_periodicity = tdd_periodicity
+        self.config_idx = int(config_idx)
+        self.tdd_periodicity = int(tdd_periodicity)
         self.input_file_name = input_file_name
         for i in range(0,TOTAL_NUM_SLOTS_IN_ONE_SF):
              self.slot_num_sf.append(i)
@@ -50,14 +51,15 @@ class RaRntiCalculator:
                     valid_slots = self.slot_num_sf.pop(i-1)
                     valid_ra_slot.append(i)
             valid_ra_slot.remove(0)
-            print "\nValid RA slot number(s)",valid_ra_slot
+            #print "\nValid RA slot number(s)",valid_ra_slot
         
     def fdd_slot(self):
         valid_ra_slot = []
         for i in self.sf_number:
             valid_slots = (2*i)-1
             valid_ra_slot.append(valid_slots)
-            print "\nValid RA slot number(s)",valid_ra_slot
+            # #print "\nValid RA slot number(s)",valid_ra_slot
+            return "\nValid RA slot number(s)" + str(valid_ra_slot)
     
     def init_data_set(self):
         table_df = pd.DataFrame()
@@ -65,7 +67,7 @@ class RaRntiCalculator:
         column_name = ['PRACH_CFG_IDX', 'PREAMBLE_FRMT', 'X', 'Y', 'SF_NUM', 'START_SYM', 'PRACH_SLOT_SF', 'TD_PRACH_OCC', 'DUR']
         table_df = pd.read_excel(self.input_file_name, header=None, names = column_name ,skiprows=3)
         config_idx_df = table_df.loc[table_df['PRACH_CFG_IDX'] == self.config_idx]
-        print config_idx_df.head()
+        #print config_idx_df.head()
         
         self.prach_cfg_idx_list = table_df['PRACH_CFG_IDX'].values.tolist()
         self.x = table_df['X'].values.tolist()
@@ -73,15 +75,17 @@ class RaRntiCalculator:
         self.prach_duration_list = table_df['DUR'].values.tolist()
         self.starting_symbol_list = table_df['START_SYM'].values.tolist()
         self.sf_number = config_idx_df['SF_NUM'].values.tolist()
-        print self.sf_number
+        #print self.sf_number
         if type(self.sf_number[0])!= int:
             self.sf_number = [s.encode('ascii', 'ignore') for s in self.sf_number]
             
             self.sf_number = [int(x.strip('\'')) for x in self.sf_number[0].split(',')]
 
-        print "\nBelow is a list of valid prach SF\n",self.sf_number
+        #print "\nBelow is a list of valid prach SF\n",self.sf_number
         
     def calc_valid_ra_slot(self):
+    
+        finalRetVal = ""
         """ To calculate valid ra slot where UE can 
             transmit RACH based on PRACH configuration index"""
         self.init_data_set()
@@ -93,15 +97,16 @@ class RaRntiCalculator:
         y_idx = self.y.pop(prach_cfg_idx)
         prach_strt_symbol = self.starting_symbol_list.pop(prach_cfg_idx)
         
-        print "\nFor Prach Config Index %i\nPrach duration = %i symbols \nPRACH Starting symbol = %i" %(self.config_idx, prach_duration,starting_symbol)
+        #print "\nFor Prach Config Index %i\nPrach duration = %i symbols \nPRACH Starting symbol = %i" %(self.config_idx, prach_duration,starting_symbol)
         valid_prach_sfn = []
         for sfn in range(0,SFN_WRAP_AROUND):
             if sfn%x_idx == y_idx:
                 valid_prach_sfn.append(sfn)
-        print "\nBelow is a list of valid prach SFN\n",valid_prach_sfn
-        print "\nPrach starting symbol = ",prach_strt_symbol
-        print "Valid Subframes in the every valid SFN = ", self.sf_number
+        #print "\nBelow is a list of valid prach SFN\n",valid_prach_sfn
+        #print "\nPrach starting symbol = ",prach_strt_symbol
+        #print "Valid Subframes in the every valid SFN = ", self.sf_number
         if self.rat_type == "TDD":
             self.tdd_slot()
         else:
-            self.fdd_slot()
+            finalRetVal = self.fdd_slot()
+        return finalRetVal
