@@ -3,6 +3,7 @@ from NR_5G_PDSCH_Transport_Block_Size import TBCalculator
 import os
 
 if __name__ == "__main__":
+    """below variables to be initialised for TB calculation """
     MCS_Table = '64QAM'
     MCS = 20
     numlayers = 1
