@@ -27,7 +27,7 @@ class TBCalculator:
 	    '''
         MCS_Table = int(raw_input("""Please state the MCS table to use
         							0 - 64QAM
-        							1 - 256QAM
+        							1 - 25QAM
         							> """))
         '''
 		
