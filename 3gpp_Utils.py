@@ -1,6 +1,7 @@
 import flask
 from flask import request
 from ra_rnti_Calculation.NR_5G_PRACH_RARNTI_Calculation import RaRntiCalculator as ra_calc
+from PDSCH_RA_TimeDomain.NR_5G_PDSCH_Resource_Allocation_TimeDomain import TdResourceAllocation as td_calc
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 

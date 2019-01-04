@@ -19,14 +19,13 @@ class TdResourceAllocation:
 
     def tdrscCalculator(self):
         if self.length_value <= 14-self.start_symbol:
-	    if self.length_value-1 <8:
-		SLIV = 14*(self.length_value-1)+self.start_symbol
-		print "\nThe SLIV is %r" %SLIV
-		print "\nSLIV in CRM command %r" %hex(SLIV)
-	    else:
-		SLIV = 14*(14-self.length_value+1)+(14-1-self.start_symbol)
-		print "\nThe SLIV is %r" %SLIV
-		print "\nSLIV in CRM command %r" %hex(SLIV)
+            if self.length_value-1 <8:
+                SLIV = 14*(self.length_value-1)+self.start_symbol
+                return "\nThe SLIV is = " + str(SLIV)
+                #print "\nSLIV in CRM command %r" %hex(SLIV)
+            else:
+                SLIV = 14*(14-self.length_value+1)+(14-1-self.start_symbol)
+                return "\nThe SLIV is = " + str(SLIV)
+                #print "\nSLIV in CRM command %r" %hex(SLIV)
         else:
-	    print "The Value of L does not satisfy '0<L<=14-S'\nPlease refer to 38.214 Section 5.1.2.1"
-
+            return "The Value of L does not satisfy '0<L<=14-S'\nPlease refer to 38.214 Section 5.1.2.1"
