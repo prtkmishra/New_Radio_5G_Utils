@@ -20,6 +20,19 @@ def home():
     #return "<h1>3GPP Utilities</h1><p>This link provides utils for 3GPP based calculations.</p>"
     return ra_calc_obj.calc_valid_ra_slot()
 
+@app.route('/tdRscCalc', methods=['GET'])
+def td_rsc_calc():
+    """ This constructor should be initialised with 
+        arg1 : Valid values of PDSCH Start Symbols 
+        arg2 : Valid values of PDSCH length in symbols" 
+     """
+    start_symbol    = request.args.get('start_symbol')
+    length_value    = request.args.get('length_value')
+    td_calc_obj = td_calc(start_symbol,length_value)
+    return td_calc_obj.tdrscCalculator()
+
+
+
 
 @app.route('/', methods=['GET'])
 def usage():
