@@ -38,5 +38,5 @@ def td_rsc_calc():
 @app.route('/', methods=['GET'])
 def usage():
     return "<h1>!!!!!!!!!Usage!!!!!!!!!!</h1><p>raRntiCalc?rat_type=FDD&config_idx=159&tdd_periodicity=4</p>"
-    
+    return "<p>tdRscCalc?start_symbol=2&length_value=3<p>"
 app.run(host='0.0.0.0', port=5001)
