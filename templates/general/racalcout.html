@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Today's Date</title>
+</head>
+
+
+<body>
+<div class="log-form">
+  <h2>RA Calculator Inputs</h2>
+  <form action = "/Racalc" method="post">
+    <p>Valid RA slot(s)<p>
+    <input type="text" id="rat_type" name= "rat_type" title="rat_type" />
+    <button name = "Return" type="submit">Return</button>
+  </form>
+    <script>
+      var user = JSON.parse('{{ user | tojson | safe}}');
+     //console.log to enable debuggin in chrome
+      console.log(user.out)
+      var finalstring = '';
+      console.log(user.out.length);
+      for (i = 0; i< user.out.length; i++) {
+          console.log("ABC" + user.out[i])
+          finalstring = finalstring + user.out[i] + ","
+      }
+      console.log(finalstring)
+      document.getElementById('rat_type').value = finalstring;
+    </script>
+</div><!--end log form -->
+</body>
+</html>

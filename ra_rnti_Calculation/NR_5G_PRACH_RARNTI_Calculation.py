@@ -59,7 +59,8 @@ class RaRntiCalculator:
             valid_slots = (2*i)-1
             valid_ra_slot.append(valid_slots)
             # #print "\nValid RA slot number(s)",valid_ra_slot
-            return "\nValid RA slot number(s)" + str(valid_ra_slot)
+            #return str(valid_ra_slot)
+        return valid_ra_slot
     
     def init_data_set(self):
         table_df = pd.DataFrame()
@@ -75,17 +76,28 @@ class RaRntiCalculator:
         self.prach_duration_list = table_df['DUR'].values.tolist()
         self.starting_symbol_list = table_df['START_SYM'].values.tolist()
         self.sf_number = config_idx_df['SF_NUM'].values.tolist()
-        #print self.sf_number
+        print(self.sf_number)
+        transStr = []
+        if type(self.sf_number[0])!= int:
+           try:
+               transStr = str(self.sf_number[0]).split(',')
+               transStr = [int(x) for x in transStr]
+           except:
+               transStr.append(int(self.sf_number[0]))
+           print(transStr)
+           self.sf_number = transStr
+
+        '''
         if type(self.sf_number[0])!= int:
             self.sf_number = [s.encode('ascii', 'ignore') for s in self.sf_number]
             
             self.sf_number = [int(x.strip('\'')) for x in self.sf_number[0].split(',')]
-
-        #print "\nBelow is a list of valid prach SF\n",self.sf_number
+        '''
+        print("\nBelow is a list of valid prach SF:{}".format(self.sf_number))
         
     def calc_valid_ra_slot(self):
     
-        finalRetVal = ""
+        finalRetVal = []
         """ To calculate valid ra slot where UE can 
             transmit RACH based on PRACH configuration index"""
         self.init_data_set()
