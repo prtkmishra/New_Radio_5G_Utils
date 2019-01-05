@@ -1,5 +1,6 @@
 import flask
-from flask import request
+from flask import Flask, render_template, Response, request, redirect, url_for
+from flask import request,render_template
 from ra_rnti_Calculation.NR_5G_PRACH_RARNTI_Calculation import RaRntiCalculator as ra_calc
 from PDSCH_RA_TimeDomain.NR_5G_PDSCH_Resource_Allocation_TimeDomain import TdResourceAllocation as td_calc
 from SUM_KR_LDPC.ComputeSumKrLdpc5G import ComputeSumKrLdpc as sumldpc
@@ -7,7 +8,7 @@ from SUM_KR_LDPC.ComputeSumKrLdpc5G import ComputeSumKrLdpc as sumldpc
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
-@app.route('/raRntiCalc', methods=['GET'])
+@app.route('/raRntiCalc', methods=['GET','POST'])
 def home():
     """ This constructor should be initialised with 
         arg1 : RAT_TYPE valid values: "FDD", "TDD" 
@@ -15,13 +16,22 @@ def home():
         arg3 : TDD periodicity valid values: "please refer to 3GPP spec 38.213" 
         arg4 : In case user wants to give own file name, else leave blank" 
     """
-    rat_type        = request.args.get('rat_type').upper()
-    config_idx      = request.args.get('config_idx')
-    tdd_periodicity = request.args.get('tdd_periodicity')
+    print("lalala")
+    print(request.form['rat_type'])
+    print(request.form['tdd_periodicity'])
+    print(request.form['config_idx'])
+    rat_type        = request.form['rat_type'].upper()
+    config_idx      = request.form['config_idx']
+    tdd_periodicity = request.form['tdd_periodicity']
     ra_calc_obj     = ra_calc(rat_type,config_idx,tdd_periodicity)
     #ra_calc_obj.calc_valid_ra_slot()
     #return "<h1>3GPP Utilities</h1><p>This link provides utils for 3GPP based calculations.</p>"
-    return ra_calc_obj.calc_valid_ra_slot()
+    #return ra_calc_obj.calc_valid_ra_slot()
+    #outstr= ra_calc_obj.calc_valid_ra_slot()
+    user = {}
+    user['out']= ra_calc_obj.calc_valid_ra_slot()
+    #print("Debug: {}".format(outstr))
+    return render_template('general/racalcout.html',user=user)
 
 @app.route('/tdRscCalc', methods=['GET'])
 def td_rsc_calc():
@@ -57,10 +67,28 @@ def sum_kr_ldpc():
     return sumldpc_obj.sum_kr()
 
 
-@app.route('/', methods=['GET'])
+@app.route('/Login', methods=['POST'])
+def login():
+    return render_template('general/usage.html')    
+
+@app.route('/Usage', methods=['POST'])
 def usage():
-    return "<h1>!!!!!!!!!Usage!!!!!!!!!! \
-           </h1><p>raRntiCalc?rat_type=FDD&config_idx=159&tdd_periodicity=4</p> \
-           <p>tdRscCalc?start_symbol=2&length_value=3<p> \
-            <p>SumKrLdpc?graph=1&TbSize=24&O_ack=2&Beta_Offset=4&N_rb=1&N_Ul_Len=10&Alpha=1<p>"
+   #  return redirect("http://52.91.0.194:5001/raRntiCalc?rat_type=FDD&config_idx=159&tdd_periodicity=4", code=302)
+    return """<h1>!!!!!!!!!Usage!!!!!!!!!! \
+    </h1><p>raRntiCalc?rat_type=FDD&config_idx=159&tdd_periodicity=4</p> \
+    <p>tdRscCalc?start_symbol=2&length_value=3<p> \
+    <p>SumKrLdpc?graph=1&TbSize=24&O_ack=2&Beta_Offset=4&N_rb=1&N_Ul_Len=10&Alpha=1<p>"""
+
+@app.route('/Racalc', methods=['POST'])
+def racalc():
+    return render_template('general/racalc.html')
+
+@app.route('/', methods=['GET'])
+def index():
+    return render_template(
+        'general/index.html',
+        # pdf link does not redirect, needs version
+        # docs version only includes major.minor
+        )
+       
 app.run(host='0.0.0.0', port=5001)
