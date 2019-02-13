@@ -6,7 +6,9 @@
 
 import math
 from sys import exit
-print "Please use the appropriate table in the script for 64QAM and 256QAM"
+print ("""Please use the appropriate table in the script for 64QAM and 256QAM. Please state the MCS table to use
+        							0 - 64QAM
+        							1 - 256QAM""")
 
 
 class TBCalculator:
@@ -24,17 +26,15 @@ class TBCalculator:
     Total_prbs=-1
 	
     def __init__(self, MCS_Table, MCS, numlayers, Nsh_Sym, NPRB_DMRS, Overhead, Total_prbs):
-	    '''
+        '''
         MCS_Table = int(raw_input("""Please state the MCS table to use
         							0 - 64QAM
         							1 - 256QAM
         							> """))
         '''
 		
-        #IMCS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
-
-	    for mcsCount in range(0,32):
-		    self.IMCS.append(mcsCount)
+	for mcsCount in range(0,32):
+	    self.IMCS.append(mcsCount)
 			
         if MCS_Table == '64QAM':
         	""" For 64QAM"""
@@ -49,62 +49,52 @@ class TBCalculator:
         
         #Layers = [1,2,3,4,5,6,7,8]
 
-		for layersCount in range(1,9):
+	for layersCount in range(1,9):
             self.Layers.append(layersCount)
-        self.xOverhead = [0, 6, 12, 18]
-        self.NRB_SC = 12
+            self.xOverhead = [0, 6, 12, 18]
+            self.NRB_SC = 12
 		
 		
         
 		
 	def TBCalc(self):
 	
-        #MCS = int(raw_input("Enter the MCS value> "))
-        MCS_Index = self.IMCS.index(self.MCS)
-        Modulation_order = self.Qm.pop(MCS_Index)
-        Code_Rate = self.R.pop(MCS_Index)/1024.00000
-        print "The code rate used is %r and modulation order is %r" %(Code_Rate, Modulation_order)
-        '''
-		numlayers = int(raw_input("Enter number of layers> "))
-        Nsh_Sym = int(raw_input("Number of symbols of the PDSCH allocation within the slot> "))
-        NPRB_DMRS = int(raw_input("Number of REs for DM-RS per PRB> "))
-        Overhead = int(raw_input("Overhead configured by higher layer parameter Xoh-PDSCH> "))
-        Total_prbs = int(raw_input("Total number of allocated PRBs for the UE> "))
-        '''
+            MCS_Index = self.IMCS.index(self.MCS)
+            Modulation_order = self.Qm.pop(MCS_Index)
+            Code_Rate = self.R.pop(MCS_Index)/1024.00000
+            print("The code rate used is %r and modulation order is %r") %(Code_Rate, Modulation_order)
     
-        nre_prb = (self.NRB_SC*self.Nsh_Sym)-self.NPRB_DMRS-self.Overhead
-        NRE = min(156,nre_prb)*self.Total_prbs
-        N_info = NRE*Code_Rate*Modulation_order*self.numlayers
-        print "Intermediate number of information bits are %r" %N_info
+            nre_prb = (self.NRB_SC*self.Nsh_Sym)-self.NPRB_DMRS-self.Overhead
+            NRE = min(156,nre_prb)*self.Total_prbs
+            N_info = NRE*self.Code_Rate*Modulation_order*self.numlayers
+            print("Intermediate number of information bits are %r") %N_info
         
-        if N_info <= 3824:
-        	n = max(3, math.floor(math.log(N_info,2))-6)
+            if N_info <= 3824:
+                n = max(3, math.floor(math.log(N_info,2))-6)
         	N_info_quant_1 = max(24,math.pow(2,n)*math.floor(N_info/math.pow(2,n)))
-        	print "\nquantized intermediate number of information bits : %r\nFor TBS please refer to table 5.1.3.2-2 in 38.214" %N_info_quant_1
-        	# raw_input()
+        	print ("\nquantized intermediate number of information bits : %r\nFor TBS please refer to table 5.1.3.2-2 in 38.214") %N_info_quant_1
         	exit()
-        else:
+            else:
         	n = math.floor(math.log(N_info-24,2))-5
         	N_info_quant = max(3840, math.pow(2,n)*math.ceil((N_info-24)/math.pow(2,n)))
         	print "quantized intermediate number of information bits : %r\n" %N_info_quant
         
-        
-        if Code_Rate <=0.25:
+            if Code_Rate <=0.25:
         	C = math.ceil((N_info_quant+24)/3816)
         	TBS = 8*C*math.ceil((N_info_quant+24)/(8*C))-24
-        	print "Code rate > 1/4 and TB size is : %r\n" %TBS
-        else:
+        	print("Code rate > 1/4 and TB size is : %r\n") %TBS
+            else:
         	if N_info_quant > 8424:
-        		C = math.ceil((N_info_quant+24)/8424)
-        		TBS = 8*C*math.ceil((N_info_quant+24)/(8*C))-24
-        		Average_Througput = ((TBS*160/80)*1000)
-        		print "As N_info_quant > 8424 and Code rate > 1/4, TB size is : %r\n" %TBS
-        		print "Average throughput : %r bps" %Average_Througput
+        	    C = math.ceil((N_info_quant+24)/8424)
+        	    TBS = 8*C*math.ceil((N_info_quant+24)/(8*C))-24
+        	    Average_Througput = ((TBS*160/80)*1000)
+        	    print("As N_info_quant > 8424 and Code rate > 1/4, TB size is : %r\n") %TBS
+        	    print("Average throughput : %r bps") %Average_Througput
         	else:
-        		TBS = 8*math.ceil((N_info_quant+24)/8)-24
-        		Average_Througput = ((TBS*160/80)*1000)
-        		print "As N_info_quant < 8424 and Code rate > 1/4,TB size is : %r\n" %TBS
-        		print "Average throughput : %r bps" %Average_Througput
+        	    TBS = 8*math.ceil((N_info_quant+24)/8)-24
+        	    Average_Througput = ((TBS*160/80)*1000)
+        	    print("As N_info_quant < 8424 and Code rate > 1/4,TB size is : %r\n")%TBS
+        	    print("Average throughput : %r bps") %Average_Througput
         
         # Further enhancements for LDPCgraph selection pending
         #if TBS <= 292:
