@@ -1,6 +1,6 @@
 ########################################################################################################################################
 # New Radio 5G Physical layer utilities for test driven development
-# Some of the scripts have been ported to flask api and rendered using AWS EC2 instance. 
+# Some of the scripts have been ported to flask api and rendered using AWS EC2 instance. (unstable) 
 # work in progress for remaining utilities
 ########################################################################################################################################
 
