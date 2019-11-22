@@ -1,6 +1,6 @@
 from itertools import product
 import pandas as pd
-import numpy as np
+import numpy as nps
 
 
 display_settings = {
