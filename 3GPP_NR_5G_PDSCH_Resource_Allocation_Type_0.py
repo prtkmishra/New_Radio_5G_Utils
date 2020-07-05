@@ -11,7 +11,7 @@ P = int(raw_input("Enter value of P> "))
 N_BWP_start = int(raw_input("Enter start PRB number of BWP > "))
 N_BWP_size = int(raw_input("Enter the size of BWP> "))
 
-Size_RBG_0 = (P-N_BWP_start)%P
+Size_RBG_0 = P-N_BWP_start%P
 Number_of_middle_RBGs = math.floor((N_BWP_size-Size_RBG_0)/P)
 size_of_last_RBG = N_BWP_size - Size_RBG_0 - P*Number_of_middle_RBGs
 
