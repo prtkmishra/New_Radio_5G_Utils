@@ -1,6 +1,6 @@
 """
 ****************************************************************************
-@Author     Prateek M/ Gangatharan
+@Author     Prateek M
 
 @file       3GPP_NR_5G_PDSCH_Transport_Block_Size_June.py
 
